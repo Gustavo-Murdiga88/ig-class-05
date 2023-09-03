@@ -39,3 +39,6 @@ data
 
 #keys
 *.pem
+
+#env
+env
