@@ -1,0 +1,3 @@
+{
+  "extends": "@gm-dev/eslint-config/node"
+}
