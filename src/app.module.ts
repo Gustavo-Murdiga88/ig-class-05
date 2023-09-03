@@ -9,6 +9,7 @@ import { AuthModule } from "./auth/auth.module";
 @Module({
 	imports: [
 		ConfigModule.forRoot({
+			envFilePath: ".env.development",
 			validate: (env) => envScheme.parse(env),
 			isGlobal: true,
 		}),
