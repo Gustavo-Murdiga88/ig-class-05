@@ -6,7 +6,13 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
-    "target": "ES2021",
+    "target": "es2022",
+        "paths": {
+      "@/*": ["src/*"]
+    },
+    "types": [
+      "vitest/globals"
+    ],
     "sourceMap": true,
     "outDir": "./dist",
     "baseUrl": "./",

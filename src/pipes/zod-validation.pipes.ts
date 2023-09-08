@@ -1,10 +1,10 @@
 import { PipeTransform, BadRequestException } from "@nestjs/common";
-import { ZodError, ZodObject } from "zod";
+import { ZodError } from "zod";
 import { fromZodError } from "zod-validation-error";
 
 export class ZodValidationPipe implements PipeTransform {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	constructor(private schema: ZodObject<any>) {}
+	constructor(private schema: any) {}
 
 	transform(value: unknown) {
 		try {

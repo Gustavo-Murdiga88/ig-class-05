@@ -7,9 +7,9 @@ import {
 } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { compare } from "bcryptjs";
-import { ZodValidationPipe } from "src/pipes/zod-validation.pipes";
-import { PrismaService } from "src/prisma/prisma.service";
 import { z } from "zod";
+import { ZodValidationPipe } from "@/pipes/zod-validation.pipes";
+import { PrismaService } from "@/prisma/prisma.service";
 
 const accountsScheme = z.object({
 	email: z.string().email(),
@@ -48,7 +48,7 @@ export class AuthenticationController {
 
 		const token = this.jwt.sign({ sub: user.id });
 		return {
-			acesses_token: token,
+			access_token: token,
 		};
 	}
 }

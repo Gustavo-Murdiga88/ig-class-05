@@ -1,5 +1,5 @@
 @baseUrl = http://localhost:3333
-
+@token = {{create_session.response.body.access_token}}
 
 # @name create_user
 
@@ -13,11 +13,30 @@ Content-Type: application/json
 }
 
 ###
-
+# @name create_session
 POST {{baseUrl}}/session
 Content-Type: application/json
 
 {
-  "email": "teste4@teste.com",
+  "email": "email@email.com",
   "password": "123456"
 }
+
+###
+# @name create_questions
+
+POST {{baseUrl}}/questions
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "title": "Create a slug 4",
+  "content": "test"
+}
+
+###
+# @name list_recent_questions
+
+GET {{baseUrl}}/questions?page=1
+Content-Type: application/json
+Authorization: Bearer {{token}}

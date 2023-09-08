@@ -1,3 +1,7 @@
 {
-  "extends": "@gm-dev/eslint-config/node"
+  "extends": "@gm-dev/eslint-config/node",
+  "rules": {
+    "no-undef": "off",
+    "import/no-extraneous-dependencies": "off"
+  }
 }

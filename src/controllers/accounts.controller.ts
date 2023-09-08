@@ -6,12 +6,12 @@ import {
 	Post,
 	UsePipes,
 } from "@nestjs/common";
-import { PrismaService } from "src/prisma/prisma.service";
 
 import { z } from "zod";
 
 import { hash } from "bcryptjs";
-import { ZodValidationPipe } from "src/pipes/zod-validation.pipes";
+import { PrismaService } from "@/prisma/prisma.service";
+import { ZodValidationPipe } from "@/pipes/zod-validation.pipes";
 
 const accountsScheme = z.object({
 	email: z.string().email(),
@@ -44,13 +44,13 @@ export class AccountsController {
 			});
 		}
 
-		const passowrdHash = await hash(password, 8);
+		const passwordHash = await hash(password, 8);
 
 		await this.prisma.user.create({
 			data: {
 				email,
 				name,
-				password: passowrdHash,
+				password: passwordHash,
 			},
 		});
 
