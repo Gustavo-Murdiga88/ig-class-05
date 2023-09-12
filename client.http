@@ -30,7 +30,7 @@ Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
-  "title": "Create a slug 4",
+  "title": "Create a slug 99",
   "content": "test"
 }
 
