@@ -1,15 +1,16 @@
 import {
+	BadRequestException,
 	Body,
 	Controller,
 	Post,
 	UnauthorizedException,
 	UsePipes,
 } from "@nestjs/common";
-import { JwtService } from "@nestjs/jwt";
-import { compare } from "bcryptjs";
 import { z } from "zod";
 import { ZodValidationPipe } from "../pipes/zod-validation.pipes";
-import { PrismaService } from "@/infra/database/prisma/prisma.service";
+import { AuthenticateStudentUseCase } from "@/domain/forum/application/use-cases/authenticate-student";
+import { WrongCredentialsError } from "@/domain/forum/application/use-cases/errors/wrong-credentials-errors";
+import { Public } from "../auth/public";
 
 const accountsScheme = z.object({
 	email: z.string().email(),
@@ -18,37 +19,36 @@ const accountsScheme = z.object({
 
 interface IBody extends z.infer<typeof accountsScheme> {}
 
+@Public()
 @Controller("/session")
 @UsePipes(new ZodValidationPipe(accountsScheme))
 export class AuthenticationController {
-	constructor(
-		private jwt: JwtService,
-		private prisma: PrismaService,
-	) {}
+	constructor(private authenticateStudent: AuthenticateStudentUseCase) {}
 
 	@Post()
 	async handle(@Body() body: IBody) {
 		const { email, password } = body;
 
-		const user = await this.prisma.user.findUnique({
-			where: {
-				email,
-			},
+		const result = await this.authenticateStudent.execute({
+			email,
+			password,
 		});
 
-		if (!user) {
-			throw new UnauthorizedException("email or password is wrong");
+		if (result.isLeft()) {
+			const error = result.value;
+
+			switch (error.constructor) {
+				case WrongCredentialsError:
+					throw new UnauthorizedException(error.message);
+				default:
+					throw new BadRequestException(error.message);
+			}
 		}
 
-		const passwordIsCorrected = compare(password, user.password);
+		const { accessToken } = result.value;
 
-		if (!passwordIsCorrected) {
-			throw new UnauthorizedException("email or password is wrong");
-		}
-
-		const token = this.jwt.sign({ sub: user.id });
 		return {
-			access_token: token,
+			access_token: accessToken,
 		};
 	}
 }
